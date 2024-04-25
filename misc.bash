@@ -1,0 +1,1 @@
+inithelprs() { source "$HOME/.bashrc"; }
