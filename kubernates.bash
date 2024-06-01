@@ -9,6 +9,12 @@ kdel() { kubectl delete $@; }
 klog() { kubectl logs -f --tail=50 $@; }
 kbash() { kubectl exec -it $1 -- /bin/bash; }
 kcurrentns() { kubectl config view --minify --output 'jsonpath={..namespace}'; };
+kedit() { kubectl edit $@; }
+kread() { 
+    path=$(echo $3 | sed 's/\./\\\./g');
+    kubectl get $1 $2 -o jsonpath="{.data.$3}" 
+}
+
 kgetdnsrecord() {
     #
     # Get dns records for all services in the cluster
