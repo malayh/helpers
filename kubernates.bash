@@ -1,8 +1,11 @@
 UTILITY_NAMESPACE="utilities"
 UTILITY_POD="utilbuntu"
 
+
 # sets the current namespace, if no namespace is provided, it sets the namespace to default
 ksetns() { kubectl config set-context --current --namespace "${1:-default}"; }
+kenvs() { kubectl config get-contexts; }
+ksetenv() { kubectl config use-context "${1:-kubernetes-admin@kubernetes}"; }
 kget() { kubectl get $@; }
 kdesc() { kubectl describe  $@; }
 kdel() { kubectl delete $@; }
