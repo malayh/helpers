@@ -12,7 +12,7 @@ kdel() { kubectl delete $@; }
 klog() { kubectl logs -f --tail=50 $@; }
 kbash() { 
     kubectl exec -it $1 -- /bin/bash;
-    if [ $? -eq 126 ]; then
+    if [ $? -gt 0 ]; then
         echo "No bash shell found in the container, trying sh";
         kubectl exec -it $1 -- /bin/sh;
     fi
