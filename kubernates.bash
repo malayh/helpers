@@ -10,11 +10,16 @@ kget() { kubectl get $@; }
 kdesc() { kubectl describe  $@; }
 kdel() { kubectl delete $@; }
 klog() { kubectl logs -f --tail=50 $@; }
-kbash() { 
-    kubectl exec -it $1 -- /bin/bash;
+kbash() {
+    args="${1}"
+    if [ -n "$2" ]; then
+        args="${1} --container $2"
+    fi
+
+    kubectl exec -it $args -- /bin/bash;
     if [ $? -gt 0 ]; then
         echo "No bash shell found in the container, trying sh";
-        kubectl exec -it $1 -- /bin/sh;
+        kubectl exec -it $args -- /bin/sh;
     fi
 }
 kcurrentns() { kubectl config view --minify --output 'jsonpath={..namespace}'; };
