@@ -28,6 +28,7 @@ kread() {
     path=$(echo $3 | sed 's/\./\\\./g');
     kubectl get $1 $2 -o jsonpath="{.data.$3}" 
 }
+ktop() { kubectl top $@; }
 
 kgetdnsrecord() {
     #
