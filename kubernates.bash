@@ -9,7 +9,11 @@ ksetenv() { kubectl config use-context "${1:-kubernetes-admin@kubernetes}"; }
 kget() { kubectl get $@; }
 kdesc() { kubectl describe  $@; }
 kdel() { kubectl delete $@; }
-klog() { kubectl logs -f --tail=50 $@; }
+klog() {
+    pod=$1;
+    lines="${2:-100}";
+    kubectl logs -f --tail=$lines $pod; 
+}
 kbash() {
     args="${1}"
     if [ -n "$2" ]; then
