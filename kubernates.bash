@@ -36,7 +36,7 @@ ktop() { kubectl top $@; }
 
 kgetdnsrecord() {
     #
-    # Get dns records for all services in the cluster
+    # Get dns records for all services/pods in the cluster
     #
 
     local current_ns=$(kcurrentns);
@@ -46,22 +46,21 @@ kgetdnsrecord() {
 
     kubectl get pods | grep $UTILITY_POD || {
         kubectl run $UTILITY_POD --image=ubuntu -- bash -c "while true; do echo hello; sleep 10; done";
-        kubectl wait --for=condition=Ready pod/$UTILITY_POD --timeout=120s
+        kubectl wait --for=condition=Ready pod/$UTILITY_POD --timeout=120s;
+        kubectl exec -it $UTILITY_POD -- apt-get update;
+        kubectl exec -it $UTILITY_POD -- apt install -y dnsutils;
     }
 
     kubectl get svc -A|egrep -v 'CLUSTER-IP|None'|awk '{print $4}'|sort -V > /tmp/ips.txt;
+    kubectl get pod -A -o custom-columns=IP:status.podIP |egrep -v 'IP' | sort -V >> /tmp/ips.txt;
     kubectl cp /tmp/ips.txt ${UTILITY_POD}:/
-
-    kubectl exec -it $UTILITY_POD -- apt-get update;
-    kubectl exec -it $UTILITY_POD -- apt install -y dnsutils;
 
     echo "===== DNS records ====="
     for ip in $(cat /tmp/ips.txt); do 
-        echo -n "$ip ";
+        echo -en "$ip \t";
         kubectl exec -it $UTILITY_POD -- dig -x $ip +short; 
     done
     echo "======================="
-
 
     rm /tmp/ips.txt;
     ksetns $current_ns;
