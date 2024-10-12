@@ -69,3 +69,7 @@ kremoveutilpod() {
     # removes utility pod
     kdel pod $UTILITY_POD -n $UTILITY_NAMESPACE;
 }
+
+kdelcompleted() {
+    kubectl get pods | grep Completed | cut -f1 -d' ' | xargs kubectl delete pod;
+}
