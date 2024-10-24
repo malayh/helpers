@@ -1,4 +1,4 @@
-inithelprs() { source "$HOME/.bashrc"; }
+initbash() { source "$HOME/.bashrc"; }
 
 w() {
 
