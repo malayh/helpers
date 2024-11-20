@@ -12,3 +12,15 @@ dps() { docker-compose ps; }
 
 # Get a shell to mentioned service
 dbash(){ docker-compose exec $1 bash; }
+
+_completion_service_list() {
+    local current_word="${COMP_WORDS[COMP_CWORD]}"
+    local suggestions=($(docker-compose ps --services))
+    COMPREPLY=($(compgen -W "${suggestions[*]}" -- "$current_word"))
+}
+
+# Register the completion function to be called for dlog
+complete -F _completion_service_list dup;
+complete -F _completion_service_list ddown;
+complete -F _completion_service_list dlog;
+complete -F _completion_service_list dbash;
