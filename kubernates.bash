@@ -73,3 +73,27 @@ kremoveutilpod() {
 kdelcompleted() {
     kubectl get pods | grep Completed | cut -f1 -d' ' | xargs kubectl delete pod;
 }
+
+_completion_envs() {
+    local current_word="${COMP_WORDS[COMP_CWORD]}"
+    local suggestions=($(kubectl config get-contexts | awk '{print $2}' | grep -v NAME))
+    COMPREPLY=($(compgen -W "${suggestions[*]}" -- "$current_word"))
+}
+
+_completion_pods() {
+    local current_word="${COMP_WORDS[COMP_CWORD]}"
+    local suggestions=($(kubectl get pods | awk '{print $1}' | grep -v NAME))
+    COMPREPLY=($(compgen -W "${suggestions[*]}" -- "$current_word")) 
+}
+
+_completion_namespace() {
+    local current_word="${COMP_WORDS[COMP_CWORD]}"
+    local suggestions=($(kubectl get ns | awk '{print $1}' | grep -v NAME))
+    COMPREPLY=($(compgen -W "${suggestions[*]}" -- "$current_word")) 
+}
+
+
+complete -F _completion_envs ksetenv;
+complete -F _completion_pods klog;
+complete -F _completion_pods kbash;
+complete -F _completion_namespace ksetns;
