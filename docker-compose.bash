@@ -11,7 +11,13 @@ dlog() { docker-compose logs -f $1; }
 dps() { docker-compose ps; }
 
 # Get a shell to mentioned service
-dbash(){ docker-compose exec $1 bash; }
+dbash(){ 
+    docker-compose exec $1 bash; 
+    if [ $? -gt 0 ]; then
+        echo "No bash shell found in the container, trying sh";
+        docker-compose exec $1 sh;
+    fi
+}
 
 _completion_service_list() {
     local current_word="${COMP_WORDS[COMP_CWORD]}"
