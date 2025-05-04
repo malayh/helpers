@@ -1,3 +1,7 @@
+dc () { docker-compose $@; }
+dtop() { docker-compose stats; }
+
+
 # Runs all or mentions service(s) in the current docker-compose.yml in the background
 dup() { docker-compose up -d $@; }
 
