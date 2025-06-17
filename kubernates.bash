@@ -6,6 +6,8 @@ UTILITY_POD="utilbuntu"
 ksetns() { kubectl config set-context --current --namespace "${1:-default}"; }
 kenvs() { kubectl config get-contexts; }
 ksetenv() { kubectl config use-context "${1:-kubernetes-admin@kubernetes}"; }
+kdelenv() { kubectl config delete-context $1;}
+
 kget() { kubectl get $@; }
 kdesc() { kubectl describe  $@; }
 kdel() { kubectl delete $@; }
