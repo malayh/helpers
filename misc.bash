@@ -16,10 +16,3 @@ w() {
 }
 
 
-_completion_justfile() {
-    local current_word="${COMP_WORDS[COMP_CWORD]}"
-    local suggestions=($(just --summary))
-    COMPREPLY=($(compgen -W "${suggestions[*]}" -- "$current_word")) 
-}
-complete -F _completion_justfile just;
-
