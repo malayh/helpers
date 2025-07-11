@@ -13,8 +13,8 @@ kdesc() { kubectl describe  $@; }
 kdel() { kubectl delete $@; }
 klog() {
     pod=$1;
-    lines="${2:-100}";
-    kubectl logs -f --tail=$lines $pod; 
+    container="${2:+--container $2}";
+    kubectl logs -f $pod $container; 
 }
 kbash() {
     args="${1}"
