@@ -22,3 +22,19 @@ function aenvs() {
 function averify() {
     aws sts get-caller-identity;
 }
+
+function aget-eks() {
+    aws eks list-clusters --query "clusters[]" --output text;
+}
+
+function aset-eks-context() {
+    aws eks update-kubeconfig --name "$1";
+}
+
+_completion_eks_ctx() {
+    local current_word="${COMP_WORDS[COMP_CWORD]}"
+    local suggestions=($(aget-eks))
+    COMPREPLY=($(compgen -W "${suggestions[*]}" -- "$current_word"))
+}
+
+complete -F _completion_eks_ctx aset-eks-context;
