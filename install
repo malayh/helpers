@@ -4,6 +4,7 @@ HELPERS_DIR=${HOME}/.helpers
 
 mkdir -p ${HELPERS_DIR}
 cp *.bash  ${HELPERS_DIR}
+cp -r scripts/ ${HELPERS_DIR}
 
 for file in ${HELPERS_DIR}/*.bash; do
     grep -q "source $file" $RC_FILE || echo "source $file" >> $RC_FILE;
