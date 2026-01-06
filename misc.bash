@@ -6,11 +6,13 @@ passgen() {
 }
 
 w() {
-
+    local tmpfile=$(mktemp) || return 1
+    trap 'rm -f -- "$tmpfile"' EXIT INT TERM
+    
     while true; do
-        eval "$@" > /tmp/w.out;    
+        eval "$@" > "$tmpfile";    
         tput clear;
-        cat /tmp/w.out;
+        cat "$tmpfile";
         sleep 1;
     done
 }
