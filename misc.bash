@@ -7,7 +7,6 @@ passgen() {
 
 w() {
     local tmpfile=$(mktemp) || return 1
-    trap 'rm -f -- "$tmpfile"' EXIT INT TERM
     
     while true; do
         eval "$@" > "$tmpfile";    
